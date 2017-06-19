@@ -1,7 +1,7 @@
 function precipitable_water = extTPW(lat1,lat2,lon1,lon2)
 % precipitable_water = extTPW(lat1,lat2,lon1,lon2)
 %
-% Right now ...
+% Must be modified for file path, and currently time bounds must be inputted once running the function. 
 
 myFolder='/Users/Coco/PrecipitableWater/RawDataMonthly';
 if ~isdir(myFolder)
@@ -17,8 +17,9 @@ timeind1 = input(prompt1);
 prompt2 = 'choose an upper bound: ';
 timeind2 = input(prompt2);
 precipitable_water=nan(lon2-lon1,lat2-lat1,timeind2-timeind1);
-for k = timeind1:timeind2;
-    baseFileName = theFiles(k).name;
+k = timeind1:timeind2
+for j=1:length(timeind1:timeind2)
+    baseFileName = theFiles(k(j)).name;
     fullFileName = fullfile(myFolder, baseFileName);
     fprintf(1,'Now reading %s\n', fullFileName);
     lat = ncread('tpw_v07r01_198801.nc3.nc','latitude');
@@ -45,13 +46,6 @@ for k = timeind1:timeind2;
        lonind2=360;
     end
     prec_wat = ncread(baseFileName,'precipitable_water');
-    precipitable_water(:,:,k)=prec_wat(lonind1:lonind2,latind1:latind2);
+    precipitable_water(:,:,j)=prec_wat(lonind1:lonind2,latind1:latind2);
     clear prec_wat;
 end
-clear myFolder;
-clear fullfile;
-clear filePattern;
-clear fullFileName;
-clear baseFileName;
-clear k;
-clear theFiles;
