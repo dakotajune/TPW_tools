@@ -1,7 +1,13 @@
 function precipitable_water = extTPWdaily(lat1,lat2,lon1,lon2)
 % precipitable_water = extTPW(lat1,lat2,lon1,lon2)
+%
+% Right now ..
 
-%Must be modified for file path, and currently time bounds must be inputted once running the function. 
+%assuming a lat min of -89 and a lon min of -179
+lonind1=180+lon1;
+lonind2=180+lon2;
+latind1=90+lat1;
+latind2=90+lat2;
 
 myFolder='/Users/Coco/PrecipitableWater/9cb08b16-2d88-4abd-8037-c8f30b661409';
 if ~isdir(myFolder)
@@ -22,11 +28,6 @@ for j=1:length(timeind1:timeind2)
     baseFileName = theFiles(k(j)).name;
     fullFileName = fullfile(myFolder, baseFileName);
     fprintf(1,'Now reading  %s\n', fullFileName); 
-    %assuming a lat min of -89 and a lon min of -179
-    lonind1=180+lon1;
-    lonind2=180+lon2;
-    latind1=90+lat1;
-    latind2=90+lat2;
     prec_wat = ncread(baseFileName,'water_vapor');
     precipitable_water(:,:,j)=prec_wat(lonind1:lonind2,latind1:latind2);
     clear prec_wat;
